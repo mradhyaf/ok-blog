@@ -2,21 +2,21 @@ import { and, desc, eq, notInArray } from "drizzle-orm";
 import { db } from "../index.js";
 import { Posts, Reads } from "../schema.js";
 
-export const getPostById = async ({ id }: { id: number }) => {
+export const selectPostById = async ({ id }: { id: number }) => {
   const res = await db.select().from(Posts).where(eq(Posts.id, id));
 
   return res;
 };
 
-export const getAllPosts = async () => {
+export const selectAllPostsTitle = async () => {
   const res = await db.select().from(Posts).orderBy(desc(Posts.createdAt));
 
   return res;
 };
 
-export const getAllUnreadPostsBy = async ({
-  reader,
+export const selectAllUnreadPostsTitleBy = async ({
   author,
+  reader,
 }: {
   reader: string;
   author: string;
@@ -38,9 +38,6 @@ export const getAllUnreadPostsBy = async ({
     )
     .orderBy(desc(Posts.createdAt));
 
-  if (!res) {
-    return null;
-  }
   return res;
 };
 
@@ -51,5 +48,5 @@ export const insertPost = async ({
 }: typeof Posts.$inferInsert) => {
   const res = await db.insert(Posts).values({ author, title, body });
 
-  return res.rowCount;
+  return res.rowCount == 1;
 };
