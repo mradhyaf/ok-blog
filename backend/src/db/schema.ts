@@ -8,29 +8,34 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const User = pgTable("user", {
-  id: serial("id").primaryKey(),
-  username: varchar("username", { length: 256 }).unique().notNull(),
-  password: varchar("password", { length: 256 }),
+export const Users = pgTable("user", {
+  email: varchar("email", { length: 256 }).primaryKey(),
+  password: varchar("password", { length: 256 }).notNull(),
 });
 
-export const Blogpost = pgTable("post", {
+export const Posts = pgTable("post", {
   id: serial("id").primaryKey(),
-  authorId: integer("authorId").references(() => User.id),
-  title: varchar("title", { length: 256 }),
-  body: text("body"),
-  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  author: varchar("author", { length: 256 })
+    .notNull()
+    .references(() => Users.email),
+  title: varchar("title", { length: 256 }).notNull(),
+  body: text("body").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const Follows = pgTable(
   "follows",
   {
-    followerId: integer("followerId").references(() => User.id),
-    followedId: integer("followedId").references(() => User.id),
+    follower: varchar("follower", { length: 256 })
+      .references(() => Users.email)
+      .notNull(),
+    followed: varchar("followed", { length: 256 })
+      .references(() => Users.email)
+      .notNull(),
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.followerId, table.followedId] }),
+      pk: primaryKey({ columns: [table.follower, table.followed] }),
     };
   }
 );
@@ -38,12 +43,16 @@ export const Follows = pgTable(
 export const Blocks = pgTable(
   "blocks",
   {
-    blockerId: integer("blockerId").references(() => User.id),
-    blockedId: integer("blockedId").references(() => User.id),
+    blocker: varchar("blocker", { length: 256 })
+      .references(() => Users.email)
+      .notNull(),
+    blocked: varchar("blocked", { length: 256 })
+      .references(() => Users.email)
+      .notNull(),
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.blockerId, table.blockedId] }),
+      pk: primaryKey({ columns: [table.blocker, table.blocked] }),
     };
   }
 );
@@ -51,12 +60,16 @@ export const Blocks = pgTable(
 export const Reads = pgTable(
   "reads",
   {
-    userId: integer("userId").references(() => User.id),
-    postId: integer("postId").references(() => Blogpost.id),
+    reader: varchar("reader", { length: 256 })
+      .references(() => Users.email)
+      .notNull(),
+    post: integer("post")
+      .references(() => Posts.id)
+      .notNull(),
   },
   (table) => {
     return {
-      pk: primaryKey({ columns: [table.userId, table.postId] }),
+      pk: primaryKey({ columns: [table.reader, table.post] }),
     };
   }
 );
