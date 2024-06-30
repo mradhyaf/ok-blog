@@ -71,6 +71,7 @@ export async function createUser(
   try {
     const body = JSON.stringify({ email, password });
     const response = await fetch(`${API_URL}/users`, {
+      headers: { "Content-Type": "application/json" },
       method: "POST",
       body,
     }).then((res) => res.json());

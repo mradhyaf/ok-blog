@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Post from "./pages/Post";
+import SignUp from "./pages/SignUp";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       </Route>
       <Route element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
+        <Route path="signup" element={<SignUp />} />
       </Route>
     </Route>
   )

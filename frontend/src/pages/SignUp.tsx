@@ -9,10 +9,10 @@ import {
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import LogoIcon from "../components/LogoIcon";
-import { authUser } from "../functions/fetchRequests";
+import { createUser } from "../functions/fetchRequests";
 import { AuthContext } from "../hooks/useAuth";
 
-const Login = () => {
+const SignUp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { login } = useContext(AuthContext);
@@ -20,14 +20,14 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const user = await authUser(email, password);
+    const success = await createUser(email, password);
 
-    if (user) {
-      login(user);
+    if (success) {
+      login({ email });
       navigate("/");
     } else {
       toast({
-        title: "Login unsuccessful",
+        title: "Register unsuccessful",
         duration: 2000,
         status: "error",
         isClosable: true,
@@ -46,14 +46,14 @@ const Login = () => {
         <FormLabel>Password</FormLabel>
         <Input type="password" onChange={(e) => setPassword(e.target.value)} />
       </FormControl>
-      <Button colorScheme="blue" onClick={handleLogin}>
-        Login
+      <Button flex="1" colorScheme="blue" onClick={handleLogin}>
+        Create account
       </Button>
-      <Link as={NavLink} to="/signup">
-        Sign Up
+      <Link as={NavLink} to="/login">
+        Log In
       </Link>
     </>
   );
 };
 
-export default Login;
+export default SignUp;

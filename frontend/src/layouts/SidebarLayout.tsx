@@ -1,10 +1,11 @@
-import { Avatar, Box, Button, Flex, Link, List, Show } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, List, Show } from "@chakra-ui/react";
 import { useContext } from "react";
-import { NavLink, Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { AuthContext } from "../hooks/useAuth";
 
 const SidebarLayout = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -12,16 +13,22 @@ const SidebarLayout = () => {
 
   const sidebarSize = { flex: "1" };
 
+  const handleHomeClick = () => {
+    navigate("/");
+  };
+
+  const handleLogoutClick = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <Flex justify="space-around" direction="row" minH="100vh">
       <Box sx={sidebarSize} as="aside" bg="gray.200" p={4}>
-        <Avatar name="John Doe" />
+        <Avatar name={user.email} />
         <List>
-          <Button>
-            <Link as={NavLink} to="/">
-              Home
-            </Link>
-          </Button>
+          <Button onClick={handleHomeClick}>Home</Button>
+          <Button onClick={handleLogoutClick}>Log out</Button>
         </List>
       </Box>
       <Box as="main" flex="4" p={4}>
