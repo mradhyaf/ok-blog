@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import { ChakraProvider } from "@chakra-ui/react";
+import { AuthProvider } from "./hooks/useAuth";
 import AuthLayout from "./layouts/AuthLayout";
 import SidebarLayout from "./layouts/SidebarLayout";
 import Home from "./pages/Home";
@@ -30,7 +31,9 @@ const router = createBrowserRouter(
 function App() {
   return (
     <ChakraProvider>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </ChakraProvider>
   );
 }

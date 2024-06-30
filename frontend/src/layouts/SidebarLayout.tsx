@@ -1,7 +1,15 @@
 import { Avatar, Box, Button, Flex, Link, List, Show } from "@chakra-ui/react";
-import { NavLink, Outlet } from "react-router-dom";
+import { useContext } from "react";
+import { NavLink, Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../hooks/useAuth";
 
 const SidebarLayout = () => {
+  const { user } = useContext(AuthContext);
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
   const sidebarSize = { flex: "1" };
 
   return (

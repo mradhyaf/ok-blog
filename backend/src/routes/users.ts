@@ -3,7 +3,6 @@ import {
   insertBlocks,
   insertFollows,
   insertUser,
-  selectAllUsers,
   selectAllUsersFollowing,
   selectUserByEmail,
 } from "../db/queries/users.js";
@@ -11,26 +10,23 @@ import {
 const router = Router();
 
 router.get("/", async (request, response) => {
-  console.log("get /");
+  const { email, password }: { email: string; password: string } =
+    request.query;
 
-  const { email }: { email: string } = request.params;
-
-  if (email) {
+  if (email && password) {
     const res = await selectUserByEmail(email);
 
-    if (res == null) {
-      response.status(201).send({ success: false });
+    if (res && res.password == password) {
+      response.status(201).send({ success: true, user: { email } });
     } else {
-      response.status(201).send({ success: true, user: res });
+      response.status(201).send({ success: false });
     }
   } else {
-    const res = await selectAllUsers();
-    response.status(201).send({ success: true, users: res, count: res.length });
+    response.status(404).send({ success: false, msg: "Bad Request." });
   }
 });
 
 router.post("/", async (request, response) => {
-  console.log("post /");
   const { email, password } = request.body;
   const res = await insertUser({ email, password });
 
@@ -42,7 +38,6 @@ router.post("/", async (request, response) => {
 });
 
 router.get("/follows", async (request, response) => {
-  console.log("get /follows");
   const { users }: { users: string } = request.query;
 
   if (!users) {
@@ -61,7 +56,6 @@ router.get("/follows", async (request, response) => {
 });
 
 router.post("/follows", async (request, response) => {
-  console.log("post /follows");
   const { follower, followed }: { follower: string; followed: string } =
     request.body;
 
@@ -75,7 +69,6 @@ router.post("/follows", async (request, response) => {
 });
 
 router.post("/blocks", async (request, response) => {
-  console.log("post /blocks");
   const { blocker, blocked }: { blocker: string; blocked: string } =
     request.body;
 
