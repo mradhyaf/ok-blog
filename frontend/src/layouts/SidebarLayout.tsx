@@ -13,6 +13,10 @@ const SidebarLayout = () => {
 
   const sidebarSize = { flex: "1" };
 
+  const handleNewPostClick = () => {
+    navigate("new-post");
+  };
+
   const handleHomeClick = () => {
     navigate("/");
   };
@@ -27,6 +31,7 @@ const SidebarLayout = () => {
       <Box sx={sidebarSize} as="aside" bg="gray.200" p={4}>
         <Avatar name={user.email} />
         <List>
+          <Button onClick={handleNewPostClick}>New Post</Button>
           <Button onClick={handleHomeClick}>Home</Button>
           <Button onClick={handleLogoutClick}>Log out</Button>
         </List>

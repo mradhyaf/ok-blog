@@ -6,9 +6,11 @@ import {
 } from "react-router-dom";
 
 import { ChakraProvider } from "@chakra-ui/react";
+import { getPostById, getPosts } from "./functions/fetchRequests";
 import { AuthProvider } from "./hooks/useAuth";
 import AuthLayout from "./layouts/AuthLayout";
 import SidebarLayout from "./layouts/SidebarLayout";
+import Editor from "./pages/Editor";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
@@ -19,8 +21,20 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" errorElement={<NotFound />}>
       <Route element={<SidebarLayout />}>
-        <Route index element={<Home />} />
-        <Route path="post/:postId" element={<Post />} />
+        <Route index element={<Home />} loader={getPosts} />
+        <Route
+          path="post/:postId"
+          element={<Post />}
+          loader={({ params }) => {
+            try {
+              const id = parseInt(params.postId || "");
+              return getPostById(id);
+            } catch (error) {
+              return null;
+            }
+          }}
+        />
+        <Route path="new-post" element={<Editor />} />
       </Route>
       <Route element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
