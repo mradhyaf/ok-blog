@@ -1,6 +1,6 @@
 import {
   integer,
-  pgTable,
+  pgSchema,
   primaryKey,
   serial,
   text,
@@ -8,29 +8,31 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const Users = pgTable("user", {
+const mySchema = pgSchema("ok_blog");
+
+export const Users = mySchema.table("user", {
   email: varchar("email", { length: 256 }).primaryKey(),
   password: varchar("password", { length: 256 }).notNull(),
 });
 
-export const Posts = pgTable("post", {
+export const Posts = mySchema.table("post", {
   id: serial("id").primaryKey(),
   author: varchar("author", { length: 256 })
     .notNull()
-    .references(() => Users.email),
+    .references(() => Users.email, { onDelete: "cascade" }),
   title: varchar("title", { length: 256 }).notNull(),
   body: text("body").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const Follows = pgTable(
+export const Follows = mySchema.table(
   "follows",
   {
     follower: varchar("follower", { length: 256 })
-      .references(() => Users.email)
+      .references(() => Users.email, { onDelete: "cascade" })
       .notNull(),
     followed: varchar("followed", { length: 256 })
-      .references(() => Users.email)
+      .references(() => Users.email, { onDelete: "cascade" })
       .notNull(),
   },
   (table) => {
@@ -40,14 +42,14 @@ export const Follows = pgTable(
   }
 );
 
-export const Blocks = pgTable(
+export const Blocks = mySchema.table(
   "blocks",
   {
     blocker: varchar("blocker", { length: 256 })
-      .references(() => Users.email)
+      .references(() => Users.email, { onDelete: "cascade" })
       .notNull(),
     blocked: varchar("blocked", { length: 256 })
-      .references(() => Users.email)
+      .references(() => Users.email, { onDelete: "cascade" })
       .notNull(),
   },
   (table) => {
@@ -57,14 +59,14 @@ export const Blocks = pgTable(
   }
 );
 
-export const Reads = pgTable(
+export const Reads = mySchema.table(
   "reads",
   {
     reader: varchar("reader", { length: 256 })
-      .references(() => Users.email)
+      .references(() => Users.email, { onDelete: "cascade" })
       .notNull(),
     post: integer("post")
-      .references(() => Posts.id)
+      .references(() => Posts.id, { onDelete: "cascade" })
       .notNull(),
   },
   (table) => {
@@ -73,3 +75,5 @@ export const Reads = pgTable(
     };
   }
 );
+
+export default mySchema;

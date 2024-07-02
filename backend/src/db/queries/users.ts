@@ -32,7 +32,7 @@ export const selectAllUsersFollowing = async (followed: string[]) => {
     .from(Follows)
     .where(inArray(Follows.followed, followed));
 
-  return res;
+  return res.map((e) => e.follower);
 };
 
 export const insertUser = async ({
@@ -42,9 +42,14 @@ export const insertUser = async ({
   const res = await db
     .insert(Users)
     .values({ email, password })
-    .onConflictDoNothing({ target: Users.email });
+    .returning({ email: Users.email })
+    .onConflictDoNothing();
 
-  return res.rowCount == 1;
+  if (res.length == 0) {
+    return null;
+  } else {
+    return res[0].email;
+  }
 };
 
 export const insertFollows = async ({
@@ -54,9 +59,17 @@ export const insertFollows = async ({
   follower: string;
   followed: string;
 }) => {
-  const res = await db.insert(Follows).values({ follower, followed });
+  const res = await db
+    .insert(Follows)
+    .values({ follower, followed })
+    .returning({ follower: Follows.follower, followed: Follows.followed })
+    .onConflictDoNothing();
 
-  return res.rowCount == 1;
+  if (res.length == 0) {
+    return null;
+  } else {
+    return res[0];
+  }
 };
 
 export const insertBlocks = async ({
@@ -66,7 +79,15 @@ export const insertBlocks = async ({
   blocker: string;
   blocked: string;
 }) => {
-  const res = await db.insert(Blocks).values({ blocker, blocked });
+  const res = await db
+    .insert(Blocks)
+    .values({ blocker, blocked })
+    .returning({ blocker: Blocks.blocker, blocked: Blocks.blocked })
+    .onConflictDoNothing();
 
-  return res.rowCount == 1;
+  if (res.length == 0) {
+    return null;
+  } else {
+    return res[0];
+  }
 };

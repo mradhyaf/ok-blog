@@ -22,4 +22,4 @@ export const client = new Client({
 await client.connect().then(() => {
   console.log(`Database connected: ${client.database}`);
 });
-export const db = drizzle(client, { schema });
+export const db = drizzle(client, { schema, logger: true });

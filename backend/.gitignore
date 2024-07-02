@@ -130,4 +130,7 @@ dist
 .pnp.*
 
 # database migrations
-drizzle-migrations
+drizzle_migrations
+
+# mock data
+mock_data

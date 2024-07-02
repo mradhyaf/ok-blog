@@ -24,6 +24,7 @@
 
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
+    "noImplicitAny": true,
     "noImplicitThis": true /* Enable error reporting when 'this' is given the type 'any'. */,
     "noUnusedLocals": true /* Enable error reporting when local variables aren't read. */,
 
