@@ -5,7 +5,7 @@ import {
   createPostValidationSchema,
   getPostByIdValidationSchema,
   getPostsPreviewValidationSchema,
-} from "../middleware/validationSchemas.js";
+} from "../middleware/validation-schemas.js";
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
 import { authStatus, authUser } from "../handlers/auth.js";
-import { authUserValidationSchema } from "../middleware/validationSchemas.js";
+import { authUserValidationSchema } from "../middleware/validation-schemas.js";
 
 const router = Router();
 

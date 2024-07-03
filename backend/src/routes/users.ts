@@ -11,7 +11,7 @@ import {
   createFollowsRelationshipValidationSchema,
   createUserValidationSchema,
   getFollowersValidationSchema,
-} from "../middleware/validationSchemas.js";
+} from "../middleware/validation-schemas.js";
 
 const router = Router();
 

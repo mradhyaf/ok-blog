@@ -8,7 +8,9 @@ import usersRouter from "./routes/users.js";
 
 const app = express();
 
-app.use(cors());
+const frontendOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+
+app.use(cors({ origin: frontendOrigin, credentials: true }));
 app.use(express.json());
 app.use(
   session({
