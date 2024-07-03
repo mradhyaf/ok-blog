@@ -9,29 +9,29 @@ import {
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import LogoIcon from "../components/LogoIcon";
-import { authUser } from "../functions/fetchRequests";
 import { AuthContext } from "../hooks/useAuth";
+import { postAuthLogin } from "../utils/fetch-requests";
 
 const Login = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { login } = useContext(AuthContext);
-  const toast = useToast();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleLogin = async () => {
-    const user = await authUser(email, password);
+    const response = await postAuthLogin(email, password);
+    const { success, user } = await response.json();
 
-    if (user) {
-      login(user);
-      navigate("/");
-    } else {
+    if (!success) {
       toast({
-        title: "Login unsuccessful",
-        duration: 2000,
+        title: "Invalid credentials",
         status: "error",
         isClosable: true,
       });
+    } else {
+      login(user);
+      navigate("/");
     }
   };
 

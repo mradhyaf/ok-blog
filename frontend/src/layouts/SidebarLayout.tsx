@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, List, Show } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Show, Stack } from "@chakra-ui/react";
 import { useContext } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { AuthContext } from "../hooks/useAuth";
@@ -11,10 +11,8 @@ const SidebarLayout = () => {
     return <Navigate to="/login" />;
   }
 
-  const sidebarSize = { flex: "1" };
-
   const handleNewPostClick = () => {
-    navigate("new-post");
+    navigate("/new-post");
   };
 
   const handleHomeClick = () => {
@@ -28,19 +26,19 @@ const SidebarLayout = () => {
 
   return (
     <Flex justify="space-around" direction="row" minH="100vh">
-      <Box sx={sidebarSize} as="aside" bg="gray.200" p={4}>
-        <Avatar name={user.email} />
-        <List>
+      <Box flex={1} as="aside" bg="gray.200" p={4}>
+        <Avatar m={4} name={user.email} />
+        <Stack spacing={4}>
           <Button onClick={handleNewPostClick}>New Post</Button>
           <Button onClick={handleHomeClick}>Home</Button>
           <Button onClick={handleLogoutClick}>Log out</Button>
-        </List>
+        </Stack>
       </Box>
-      <Box as="main" flex="4" p={4}>
+      <Box as="main" flex={4} p={4} maxW="60vw">
         <Outlet />
       </Box>
       <Show above="md">
-        <Box sx={sidebarSize} bg="gray.200" />
+        <Box flex={1} as="aside" bg="gray.200" />
       </Show>
     </Flex>
   );

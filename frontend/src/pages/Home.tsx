@@ -1,5 +1,4 @@
 import {
-  Heading,
   List,
   ListItem,
   Tab,
@@ -9,23 +8,33 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useContext } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../hooks/useAuth";
-
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-  author: string;
-  createdAt: string;
-}
+import { Blog } from "../types";
+import { getPostsPreview } from "../utils/fetch-requests";
 
 const Home = () => {
-  const posts = useLoaderData() as Post[];
+  const [posts, setPosts] = useState<Blog[]>([]);
   const { user } = useContext(AuthContext);
   const filteredPosts = posts.filter((e) => e.author == user?.email);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function getPosts() {
+      const response = await getPostsPreview(user!.email);
+      const { success, blogs } = await response.json();
+
+      if (!success) {
+        return;
+      }
+
+      setPosts(blogs);
+    }
+
+    getPosts();
+    return () => {};
+  }, [user]);
 
   const handlePostClick = (postId: number) => {
     return () => navigate(`/post/${postId}`);
@@ -48,7 +57,7 @@ const Home = () => {
                 m={2}
                 onClick={handlePostClick(post.id)}
               >
-                <Heading as="h3">{post.title}</Heading>
+                <Text>{post.title}</Text>
               </ListItem>
             ))}
           </List>
@@ -64,7 +73,7 @@ const Home = () => {
                   m={2}
                   onClick={handlePostClick(post.id)}
                 >
-                  <Heading as="h3">{post.title}</Heading>
+                  <Text>{post.title}</Text>
                   <Text>{Date.parse(post.createdAt)}</Text>
                 </ListItem>
               ))}

@@ -9,8 +9,8 @@ import {
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import LogoIcon from "../components/LogoIcon";
-import { createUser } from "../functions/fetchRequests";
 import { AuthContext } from "../hooks/useAuth";
+import { createUser } from "../utils/fetch-requests";
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>("");
