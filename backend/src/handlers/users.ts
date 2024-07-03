@@ -56,7 +56,7 @@ export async function createFollowsRelationship(
   const res = await insertFollows({ follower, followed });
 
   if (res == null) {
-    response.status(400).send({ success: false, msg: "Unable to follow user" });
+    response.status(500).send({ success: false, msg: "Unable to follow user" });
   } else {
     response.status(201).send({ success: true });
   }

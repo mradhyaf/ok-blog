@@ -64,7 +64,7 @@ export const createFollowsRelationshipValidationSchema: Schema = {
   },
   followed: {
     notEmpty: {
-      errorMessage: "Follower cannot be empty",
+      errorMessage: "Followed cannot be empty",
     },
     isEmail: {
       errorMessage: "Invalid followed email",
