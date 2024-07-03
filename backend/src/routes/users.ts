@@ -5,19 +5,15 @@ import {
   createFollowsRelationship,
   createUser,
   getFollowers,
-  getUser,
 } from "../handlers/users.js";
 import {
   createBlocksRelationshipValidationSchema,
   createFollowsRelationshipValidationSchema,
   createUserValidationSchema,
   getFollowersValidationSchema,
-  getUserValidationSchema,
 } from "../middleware/validationSchemas.js";
 
 const router = Router();
-
-router.get("/", checkSchema(getUserValidationSchema), getUser);
 
 router.post("/", checkSchema(createUserValidationSchema), createUser);
 

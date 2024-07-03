@@ -19,12 +19,12 @@ export async function getPostsPreview(request: Request, response: Response) {
   if (author) {
     const res = await selectAllUnreadPostsPreviewBy({ reader, author });
     return response
-      .status(201)
+      .status(200)
       .send({ success: true, blogs: res, count: res.length });
   } else {
     const res = await selectAllVisiblePostsPreview(reader);
     return response
-      .status(201)
+      .status(200)
       .send({ success: true, blogs: res, count: res.length });
   }
 }
@@ -40,9 +40,9 @@ export async function getPostById(request: Request, response: Response) {
   const res = await selectPostById(id);
 
   if (res) {
-    return response.status(201).send({ success: true, blog: res });
+    return response.status(200).send({ success: true, blog: res });
   } else {
-    return response.status(400).send({ success: false, msg: "Post not found" });
+    return response.status(404).send({ success: false, msg: "Post not found" });
   }
 }
 
@@ -60,7 +60,7 @@ export async function createPost(request: Request, response: Response) {
     return response.status(201).send({ success: true, id: res });
   } else {
     return response
-      .status(400)
+      .status(500)
       .send({ success: false, msg: "Unable to create post" });
   }
 }

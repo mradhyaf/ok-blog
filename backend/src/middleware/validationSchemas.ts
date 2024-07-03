@@ -1,6 +1,6 @@
 import { Schema } from "express-validator";
 
-export const getUserValidationSchema: Schema = {
+export const authUserValidationSchema: Schema = {
   email: {
     notEmpty: {
       errorMessage: "Email cannot be empty",
@@ -8,13 +8,13 @@ export const getUserValidationSchema: Schema = {
     isEmail: {
       errorMessage: "Invalid email",
     },
-    in: "query",
+    in: "body",
   },
   password: {
     notEmpty: {
       errorMessage: "Password cannot be empty",
     },
-    in: "query",
+    in: "body",
   },
 };
 
