@@ -2,13 +2,22 @@ import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import session from "express-session";
+import logger from "./middleware/logger.js";
 import authRouter from "./routes/auth.js";
 import postsRouter from "./routes/posts.js";
 import usersRouter from "./routes/users.js";
 
 const app = express();
 
-const frontendOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const frontendOrigin = process.env.FRONTEND_ORIGIN;
+
+if (!frontendOrigin) {
+  throw new Error("Environment variable FRONTEND_ORIGIN is not specified.");
+}
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV == "development") {
+  app.use(logger);
+}
 
 app.use(cors({ origin: frontendOrigin, credentials: true }));
 app.use(express.json());

@@ -7,7 +7,6 @@ const PGUSER = process.env.PGUSER || "postgres";
 const PGPASSWORD = process.env.PGPASSWORD || "postgres";
 const PGHOST = process.env.PGHOST || "localhost";
 const PGPORT = process.env.PGPORT || "5432";
-const PGDATABASE = process.env.PGDATABASE || "postgres";
 
 const { Client } = pg;
 
@@ -16,10 +15,14 @@ export const client = new Client({
   password: PGPASSWORD,
   host: PGHOST,
   port: parseInt(PGPORT),
-  database: PGDATABASE,
 });
 
 await client.connect().then(() => {
   console.log(`Database connected: ${client.database}`);
+}).catch(err => {
+  console.error(err)
+}).finally(() => {
+  console.log(`Environment variables: user: ${PGUSER}; password: ${PGPASSWORD}; host: ${PGHOST}; PORT: ${PGPORT}`)
 });
+
 export const db = drizzle(client, { schema, logger: true });

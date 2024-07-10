@@ -1,0 +1,46 @@
+name: ok-blog
+
+services:
+  frontend:
+    build: ./frontend
+    environment:
+      - VITE_BACKEND_URL=http://localhost:3000
+    networks:
+      - client-side
+    ports:
+      - 5173:5173
+
+  backend:
+    build: ./backend
+    environment:
+      - PORT=3000
+      - FRONTEND_ORIGIN=http://localhost:5173
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - PGHOST=postgres
+      - PGPORT=5432
+    networks:
+      - client-side
+      - server-side
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - server-side
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/data/db
+
+networks:
+  client-side:
+  server-side:
+
+volumes:
+  postgres_data:
